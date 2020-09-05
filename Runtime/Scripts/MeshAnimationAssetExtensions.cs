@@ -2,7 +2,7 @@ namespace CodeWriter.MeshAnimation
 {
     using UnityEngine;
 
-    public static class MeshAnimatorAssetExtensions
+    public static class MeshAnimationAssetExtensions
     {
         private static readonly int AnimationTimeProp = Shader.PropertyToID("_AnimTime");
 
