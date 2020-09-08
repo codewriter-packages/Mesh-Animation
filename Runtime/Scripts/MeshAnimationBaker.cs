@@ -106,7 +106,8 @@ namespace CodeWriter.MeshAnimation
         private static void BakeAnimations(MeshAnimationAsset asset)
         {
             var bakeObject = Object.Instantiate(asset.skin.gameObject);
-            var bakeMesh = new Mesh();
+            bakeObject.hideFlags = HideFlags.HideAndDontSave;
+            var bakeMesh = new Mesh {hideFlags = HideFlags.HideAndDontSave};
             var skin = bakeObject.GetComponentInChildren<SkinnedMeshRenderer>();
 
             var bakeTransform = bakeObject.transform;
@@ -190,7 +191,7 @@ namespace CodeWriter.MeshAnimation
             finally
             {
                 AnimationMode.EndSampling();
-                AnimationMode.StartAnimationMode();
+                AnimationMode.StopAnimationMode();
             }
 
             Object.DestroyImmediate(bakeObject);
