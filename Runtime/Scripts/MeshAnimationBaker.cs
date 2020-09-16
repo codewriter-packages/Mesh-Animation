@@ -45,9 +45,13 @@ namespace CodeWriter.MeshAnimation
                 EditorUtility.DisplayProgressBar("Mesh Animator", "Baking", 0f);
 
                 DestroyObject(ref asset.bakedTexture);
-                CreateTexture(asset);
-                CreateMaterial(asset);
-                BakeAnimations(asset);
+                CreateTexture(asset, out var aborted);
+                if (!aborted)
+                {
+                    CreateMaterial(asset);
+                    BakeAnimations(asset);
+                }
+
                 SaveAsset(asset);
             }
             finally
@@ -80,13 +84,35 @@ namespace CodeWriter.MeshAnimation
             }
         }
 
-        private static void CreateTexture(MeshAnimationAsset asset)
+        private static void CreateTexture(MeshAnimationAsset asset, out bool aborted)
         {
+            aborted = false;
+
             if (asset.bakedTexture == null)
             {
                 var mesh = asset.skin.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh;
                 var vertexCount = mesh.vertexCount;
                 var framesCount = asset.animationClips.Sum(clip => clip.GetFramesCount() + 1);
+
+                if (vertexCount > 2048)
+                {
+                    var msg = $"WARNING: Mesh contains too many vertices ({vertexCount})";
+                    if (!EditorUtility.DisplayDialog("Mesh Animator", msg, "Continue", "Abort"))
+                    {
+                        aborted = true;
+                        return;
+                    }
+                }
+
+                if (framesCount > 2048)
+                {
+                    var msg = $"WARNING: Mesh contains too many animation frames ({vertexCount})";
+                    if (!EditorUtility.DisplayDialog("Mesh Animator", msg, "Continue", "Abort"))
+                    {
+                        aborted = true;
+                        return;
+                    }
+                }
 
                 var texWidth = Mathf.NextPowerOfTwo(vertexCount);
                 var textHeight = Mathf.NextPowerOfTwo(framesCount);
