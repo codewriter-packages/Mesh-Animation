@@ -22,9 +22,9 @@ namespace CodeWriter.MeshAnimation
         }
 
         [PublicAPI]
-        public void Play(string animationName, float speed = 1f)
+        public void Play(string animationName, float speed = 1f, float time = 0f)
         {
-            meshAnimation.Play(_propertyBlock, animationName, speed);
+            meshAnimation.Play(_propertyBlock, animationName, speed, time);
             meshRenderer.SetPropertyBlock(_propertyBlock);
         }
     }
