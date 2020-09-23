@@ -52,10 +52,15 @@ namespace CodeWriter.MeshAnimation
             foreach (var clip in animationClips)
             {
                 if (clip == null) return "Animation clip is null";
+                if (clip.legacy) return "Legacy Animation clips not supported";
             }
 
             if (shader == null) return "shader is null";
             if (skin == null) return "skin is null";
+            
+            var skinnedMeshRenderer = skin.GetComponentInChildren<SkinnedMeshRenderer>();
+            if (skinnedMeshRenderer == null) return "skin.GetComponentInChildren<SkinnedMeshRenderer>() == null";
+                
             var skinAnimator = skin.GetComponent<Animator>();
             if (skinAnimator == null) return "skin.GetComponent<Animator>() == null";
             if (skinAnimator.runtimeAnimatorController == null)
