@@ -8,6 +8,7 @@ Mesh Animation bakes vertex positions for each frame of animation to texture. Cu
 
 ## Limitations
 * Supported up to 2048 vertices per mesh.
+* Bakes one SkinnedMeshRenderer animation per prefab.
 * Requires special shader for vertex animations.
 * Animations can only be baked in editor mode.
 * Possibly low animation quality on some GPUs.
@@ -27,3 +28,8 @@ gameObject.GetComponent<MeshAnimator>().Play("Zombie Walking");
 <br>
 
 [![Mesh Animation](https://user-images.githubusercontent.com/26966368/92770369-90559200-f3a2-11ea-9f1f-37719a0637c7.png)](#)
+
+## FAQ
+
+##### Which Rig AnimationType are supported?
+Works with Humanoid. Not works with legacy. Other not tested.
