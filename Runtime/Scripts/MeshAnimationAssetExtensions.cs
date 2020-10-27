@@ -18,6 +18,7 @@ namespace CodeWriter.MeshAnimation
             var length = data.lengthFrames;
             speed = Mathf.Max(0.01f, speed);
             speed /= Mathf.Max(data.clip.length, 0.01f);
+            time += Time.realtimeSinceStartup;
 
             block.SetVector(AnimationTimeProp, new Vector4(start, length, speed, time));
         }
