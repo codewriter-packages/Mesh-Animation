@@ -10,7 +10,7 @@ namespace CodeWriter.MeshAnimation
             MaterialPropertyBlock block,
             string animationName,
             float speed = 1f,
-            float time = 0f)
+            float normalizedTime = 0f)
         {
             var data = asset.animationData.Find(d => d.clip.name == animationName);
 
@@ -18,7 +18,7 @@ namespace CodeWriter.MeshAnimation
             var length = data.lengthFrames;
             speed = Mathf.Max(0.01f, speed);
             speed /= Mathf.Max(data.clip.length, 0.01f);
-            time += Time.timeSinceLevelLoad;
+            var time = Mathf.Clamp01(normalizedTime) * data.clip.length;
 
             block.SetVector(AnimationTimeProp, new Vector4(start, length, speed, time));
         }
