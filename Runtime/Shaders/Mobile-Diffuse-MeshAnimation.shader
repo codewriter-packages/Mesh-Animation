@@ -5,6 +5,7 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
         _AnimMul ("Animation Bounds Size", Vector) = (1, 1, 1, 0)
         _AnimAdd ("Animation Bounds Offset", Vector) = (0, 0, 0, 0)
         [PerRendererData] _AnimTime ("Animation Time", Vector) = (0, 1, 1, 0) /* (x: start, y: length, z: speed, w: startTime) */
+        [PerRendererData] _AnimLoop ("Animation Loop", Float) = 1
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -22,6 +23,7 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
         
         float4 _AnimMul;
         float4 _AnimAdd;
+        float _AnimLoop;
         
         UNITY_INSTANCING_BUFFER_START(Props)
             UNITY_DEFINE_INSTANCED_PROP(float4, _AnimTime)
@@ -45,10 +47,16 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
             UNITY_SETUP_INSTANCE_ID(v);
             
             float4 t = UNITY_ACCESS_INSTANCED_PROP(Props, _AnimTime);
-                        
-            float vertCoord = (0.5 + v.vertexId) * _AnimTex_TexelSize.x;
-            float animCoord = (0.5 + t.x + frac((_Time.y - t.w) * t.z) * t.y) * _AnimTex_TexelSize.y;            
-            float4 position = tex2Dlod(_AnimTex, float4(vertCoord, animCoord, 0, 0)) * _AnimMul + _AnimAdd;
+            
+            float progress = (_Time.y - t.w) * t.z;
+            float progress01 = lerp(saturate(progress), frac(progress), _AnimLoop);
+            float4 coords = float4(
+                0.5 + v.vertexId,
+                0.5 + t.x + progress01 * t.y,
+                0,
+                0
+            );
+            float4 position = tex2Dlod(_AnimTex, coords * _AnimTex_TexelSize) * _AnimMul + _AnimAdd;
             
             v.vertex = position;
         }
