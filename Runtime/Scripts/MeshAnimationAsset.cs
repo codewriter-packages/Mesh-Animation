@@ -41,6 +41,7 @@ namespace CodeWriter.MeshAnimation
             public AnimationClip clip;
             public float startFrame;
             public float lengthFrames;
+            public bool looping;
         }
 
         public bool IsInvalid => GetValidationMessage() != null;
@@ -57,10 +58,10 @@ namespace CodeWriter.MeshAnimation
 
             if (shader == null) return "shader is null";
             if (skin == null) return "skin is null";
-            
+
             var skinnedMeshRenderer = skin.GetComponentInChildren<SkinnedMeshRenderer>();
             if (skinnedMeshRenderer == null) return "skin.GetComponentInChildren<SkinnedMeshRenderer>() == null";
-                
+
             var skinAnimator = skin.GetComponent<Animator>();
             if (skinAnimator == null) return "skin.GetComponent<Animator>() == null";
             if (skinAnimator.runtimeAnimatorController == null)

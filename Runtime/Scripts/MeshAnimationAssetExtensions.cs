@@ -10,7 +10,6 @@ namespace CodeWriter.MeshAnimation
         public static void Play(this MeshAnimationAsset asset,
             MaterialPropertyBlock block,
             string animationName,
-            bool loop = true,
             float speed = 1f,
             float normalizedTime = 0f)
         {
@@ -22,7 +21,7 @@ namespace CodeWriter.MeshAnimation
             var s = speed / Mathf.Max(lengthSeconds, 0.01f);
             var time = Time.timeSinceLevelLoad + Mathf.Clamp01(normalizedTime) * lengthSeconds;
 
-            block.SetFloat(AnimationLoopProp, loop ? 1 : 0);
+            block.SetFloat(AnimationLoopProp, data.looping ? 1 : 0);
             block.SetVector(AnimationTimeProp, new Vector4(start, lengthFrames, s, time));
         }
     }

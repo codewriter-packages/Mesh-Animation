@@ -180,12 +180,14 @@ namespace CodeWriter.MeshAnimation
                 foreach (var clip in asset.animationClips)
                 {
                     var framesCount = clip.GetFramesCount();
+                    var looping = clip.isLooping;
 
                     asset.animationData.Add(new MeshAnimationAsset.AnimationData
                     {
                         clip = clip,
                         startFrame = globalFrame,
                         lengthFrames = framesCount,
+                        looping = looping,
                     });
 
                     for (int frame = 0; frame < framesCount; frame++)
@@ -196,10 +198,15 @@ namespace CodeWriter.MeshAnimation
                         skin.BakeMesh(bakeMesh);
 
                         CaptureMeshToTexture(asset.bakedTexture, bakeMesh, boundMin, boundMax, globalFrame);
-                        if (frame == 0)
+
+                        if (looping && frame == 0)
                         {
                             CaptureMeshToTexture(asset.bakedTexture, bakeMesh, boundMin, boundMax,
                                 globalFrame + framesCount);
+                        }
+                        else if (!looping && frame == framesCount - 1)
+                        {
+                            CaptureMeshToTexture(asset.bakedTexture, bakeMesh, boundMin, boundMax, globalFrame + 1);
                         }
 
                         ++globalFrame;
