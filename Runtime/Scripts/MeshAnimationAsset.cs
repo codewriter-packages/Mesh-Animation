@@ -38,9 +38,10 @@ namespace CodeWriter.MeshAnimation
         [Serializable]
         internal class AnimationData
         {
-            public AnimationClip clip;
+            public string name;
             public float startFrame;
             public float lengthFrames;
+            public float lengthSeconds;
             public bool looping;
         }
 

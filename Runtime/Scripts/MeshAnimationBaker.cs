@@ -184,9 +184,10 @@ namespace CodeWriter.MeshAnimation
 
                     asset.animationData.Add(new MeshAnimationAsset.AnimationData
                     {
-                        clip = clip,
+                        name = clip.name,
                         startFrame = globalFrame,
                         lengthFrames = framesCount,
+                        lengthSeconds = clip.length,
                         looping = looping,
                     });
 

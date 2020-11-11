@@ -13,16 +13,15 @@ namespace CodeWriter.MeshAnimation
             float speed = 1f,
             float normalizedTime = 0f)
         {
-            var data = asset.animationData.Find(d => d.clip.name == animationName);
+            var data = asset.animationData.Find(d => d.name == animationName);
 
             var start = data.startFrame;
-            var lengthFrames = data.lengthFrames;
-            var lengthSeconds = data.clip.length;
-            var s = speed / Mathf.Max(lengthSeconds, 0.01f);
-            var time = Time.timeSinceLevelLoad + Mathf.Clamp01(normalizedTime) * lengthSeconds;
+            var length = data.lengthFrames;
+            var s = speed / Mathf.Max(data.lengthSeconds, 0.01f);
+            var time = Time.timeSinceLevelLoad + Mathf.Clamp01(normalizedTime) * data.lengthSeconds;
 
             block.SetFloat(AnimationLoopProp, data.looping ? 1 : 0);
-            block.SetVector(AnimationTimeProp, new Vector4(start, lengthFrames, s, time));
+            block.SetVector(AnimationTimeProp, new Vector4(start, length, s, time));
         }
     }
 }
