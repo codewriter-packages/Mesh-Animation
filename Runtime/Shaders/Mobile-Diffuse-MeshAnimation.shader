@@ -23,10 +23,10 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
         
         float4 _AnimMul;
         float4 _AnimAdd;
-        float _AnimLoop;
         
         UNITY_INSTANCING_BUFFER_START(Props)
             UNITY_DEFINE_INSTANCED_PROP(float4, _AnimTime)
+            UNITY_DEFINE_INSTANCED_PROP(float, _AnimLoop)
         UNITY_INSTANCING_BUFFER_END(Props)
         
         struct appdata
@@ -47,9 +47,10 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
             UNITY_SETUP_INSTANCE_ID(v);
             
             float4 t = UNITY_ACCESS_INSTANCED_PROP(Props, _AnimTime);
+            float looping = UNITY_ACCESS_INSTANCED_PROP(Props, _AnimLoop);
             
             float progress = (_Time.y - t.w) * t.z;
-            float progress01 = lerp(saturate(progress), frac(progress), _AnimLoop);
+            float progress01 = lerp(saturate(progress), frac(progress), looping);
             float4 coords = float4(
                 0.5 + v.vertexId,
                 0.5 + t.x + progress01 * t.y,
