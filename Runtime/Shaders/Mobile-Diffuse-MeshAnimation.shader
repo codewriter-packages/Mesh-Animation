@@ -1,7 +1,9 @@
 Shader "Mobile/Diffuse (Mesh Animation)" {
     Properties {
         _MainTex ("Base (RGB)", 2D) = "white" {}
-        _AnimTex ("Animation (RGB)", 2D) = "white" {}
+        
+        [Header(Mesh Animation)]
+        _AnimTex ("Animation", 2D) = "white" {}
         _AnimMul ("Animation Bounds Size", Vector) = (1, 1, 1, 0)
         _AnimAdd ("Animation Bounds Offset", Vector) = (0, 0, 0, 0)
         [PerRendererData] _AnimTime ("Animation Time", Vector) = (0, 1, 1, 0) /* (x: start, y: length, z: speed, w: startTime) */
@@ -51,15 +53,10 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
             
             float progress = (_Time.y - t.w) * t.z;
             float progress01 = lerp(saturate(progress), frac(progress), looping);
-            float4 coords = float4(
-                0.5 + v.vertexId,
-                0.5 + t.x + progress01 * t.y,
-                0,
-                0
-            );
-            float4 position = tex2Dlod(_AnimTex, coords * _AnimTex_TexelSize) * _AnimMul + _AnimAdd;
+            float2 coords = float2(0.5 + v.vertexId, 0.5 + t.x + progress01 * t.y) * _AnimTex_TexelSize.xy;
+            float4 position = tex2Dlod(_AnimTex, float4(coords, 0, 0)) * _AnimMul + _AnimAdd;
             
-            v.vertex = position;
+            v.vertex = float4(position.xyz, 1.0);
         }
         
         void surf (Input IN, inout SurfaceOutput o) {
