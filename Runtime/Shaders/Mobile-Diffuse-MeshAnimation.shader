@@ -16,7 +16,7 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
         CGPROGRAM
         #pragma surface surf Lambert noforwardadd vertex:vert
         #pragma multi_compile_instancing 
-        #pragma target 3.0
+        #pragma target 3.5
         #pragma require samplelod
         
         sampler2D _MainTex;

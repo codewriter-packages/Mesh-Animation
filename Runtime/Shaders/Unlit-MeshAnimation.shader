@@ -23,7 +23,7 @@
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma multi_compile_instancing 
-            #pragma target 3.0
+            #pragma target 3.5
             #pragma require samplelod
 
             #include "UnityCG.cginc"
@@ -86,4 +86,6 @@
             ENDCG
         }
     }
+        
+    Fallback "Mobile/Diffuse"
 }
