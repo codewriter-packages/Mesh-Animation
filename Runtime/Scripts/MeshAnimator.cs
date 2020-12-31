@@ -19,6 +19,8 @@ namespace CodeWriter.MeshAnimation
         private void Awake()
         {
             _propertyBlock = new MaterialPropertyBlock();
+            
+            MeshCache.GenerateSecondaryUv(this.meshRenderer.GetComponent<MeshFilter>().sharedMesh);
         }
 
         [PublicAPI]

@@ -16,7 +16,7 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
         CGPROGRAM
         #pragma surface surf Lambert noforwardadd vertex:vert
         #pragma multi_compile_instancing 
-        #pragma target 3.5
+        #pragma target 2.5
         #pragma require samplelod
         
         sampler2D _MainTex;
@@ -36,8 +36,8 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
             float4 vertex : POSITION;
             float3 normal : NORMAL;
             float2 texcoord : TEXCOORD0;
+            float2 vertcoord: TEXCOORD1;
             float4 color : COLOR0;
-            uint vertexId : SV_VertexID;
             UNITY_VERTEX_INPUT_INSTANCE_ID
         };
         
@@ -53,7 +53,7 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
             
             float progress = (_Time.y - t.w) * t.z;
             float progress01 = lerp(saturate(progress), frac(progress), looping);
-            float2 coords = float2(0.5 + v.vertexId, 0.5 + t.x + progress01 * t.y) * _AnimTex_TexelSize.xy;
+            float2 coords = float2(0.5 + v.vertcoord.x, 0.5 + t.x + progress01 * t.y) * _AnimTex_TexelSize.xy;
             float4 position = tex2Dlod(_AnimTex, float4(coords, 0, 0)) * _AnimMul + _AnimAdd;
             
             v.vertex = float4(position.xyz, 1.0);

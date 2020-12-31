@@ -23,7 +23,7 @@
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma multi_compile_instancing 
-            #pragma target 3.5
+            #pragma target 2.5
             #pragma require samplelod
 
             #include "UnityCG.cginc"
@@ -32,7 +32,7 @@
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
-                uint vertexId : SV_VertexID;
+                float2 vertcoord: TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -65,7 +65,7 @@
                 
                 float progress = (_Time.y - t.w) * t.z;
                 float progress01 = lerp(saturate(progress), frac(progress), looping);
-                float2 coords = float2(0.5 + v.vertexId, 0.5 + t.x + progress01 * t.y) * _AnimTex_TexelSize.xy;
+                float2 coords = float2(0.5 + v.vertcoord.x, 0.5 + t.x + progress01 * t.y) * _AnimTex_TexelSize.xy;
                 float4 position = tex2Dlod(_AnimTex, float4(coords, 0, 0)) * _AnimMul + _AnimAdd;
                 
                 v.vertex = float4(position.xyz, 1.0);
