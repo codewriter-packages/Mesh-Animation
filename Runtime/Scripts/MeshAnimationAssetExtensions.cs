@@ -11,14 +11,32 @@ namespace CodeWriter.MeshAnimation
             MaterialPropertyBlock block,
             string animationName,
             float speed = 1f,
-            float normalizedTime = 0f)
+            float? normalizedTime = 0f)
         {
-            var data = asset.animationData.Find(d => d.name == animationName);
+            MeshAnimationAsset.AnimationData data = null;
+
+            foreach (var animationData in asset.animationData)
+            {
+                if (animationData.name != animationName)
+                {
+                    continue;
+                }
+
+                data = animationData;
+                break;
+            }
+
+            if (data == null)
+            {
+                return;
+            }
 
             var start = data.startFrame;
             var length = data.lengthFrames;
             var s = speed / Mathf.Max(data.lengthSeconds, 0.01f);
-            var time = Time.timeSinceLevelLoad + Mathf.Clamp01(normalizedTime) * data.lengthSeconds;
+            var time = normalizedTime.HasValue
+                ? Time.timeSinceLevelLoad + Mathf.Clamp01(normalizedTime.Value) * data.lengthSeconds
+                : block.GetVector(AnimationTimeProp).z;
 
             block.SetFloat(AnimationLoopProp, data.looping ? 1 : 0);
             block.SetVector(AnimationTimeProp, new Vector4(start, length, s, time));
