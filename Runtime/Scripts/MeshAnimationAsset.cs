@@ -17,6 +17,9 @@ namespace CodeWriter.MeshAnimation
         [SerializeField]
         internal Shader shader = default;
 
+        [SerializeField]
+        internal Material materialPreset = default;
+
         [Required]
         [SerializeField]
         [ListDrawerSettings(Expanded = true, ShowPaging = false, AlwaysAddDefaultValue = true)]
@@ -24,8 +27,8 @@ namespace CodeWriter.MeshAnimation
 
         [Required]
         [SerializeField]
-        [ListDrawerSettings(ShowPaging = false, AlwaysAddDefaultValue = true)]
-        internal List<string> extraMaterials = new List<string>();
+        [TableList(ShowPaging = false)]
+        internal List<ExtraMaterial> extraMaterials = new List<ExtraMaterial>();
 
         [DisableIf("@true")]
         [SerializeField]
@@ -44,6 +47,15 @@ namespace CodeWriter.MeshAnimation
         [DisableIf("@true")]
         [SerializeField]
         internal List<AnimationData> animationData = new List<AnimationData>();
+
+        [Serializable]
+        internal class ExtraMaterial
+        {
+            [Required]
+            public string name;
+
+            public Material preset;
+        }
 
         [Serializable]
         internal class ExtraMaterialData

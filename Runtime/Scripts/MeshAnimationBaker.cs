@@ -6,6 +6,7 @@ namespace CodeWriter.MeshAnimation
     using System.Collections.Generic;
     using JetBrains.Annotations;
     using UnityEditor;
+    using UnityEditor.Presets;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
@@ -95,34 +96,56 @@ namespace CodeWriter.MeshAnimation
                 asset.bakedMaterial.shader = asset.shader;
                 asset.bakedMaterial.name = materialAssetName;
             }
+
+            if (asset.materialPreset != null)
+            {
+                var preset = new Preset(asset.materialPreset);
+                if (preset.CanBeAppliedTo(asset.bakedMaterial))
+                {
+                    preset.ApplyTo(asset.bakedMaterial);
+                }
+
+                Object.DestroyImmediate(preset);
+            }
         }
 
         private static void CreateExtraMaterials(MeshAnimationAsset asset)
         {
-            foreach (var materialName in asset.extraMaterials)
+            foreach (var extra in asset.extraMaterials)
             {
-                var data = asset.extraMaterialData.Find(it => it.name == materialName);
+                var data = asset.extraMaterialData.Find(it => it.name == extra.name);
                 if (data == null)
                 {
                     data = new MeshAnimationAsset.ExtraMaterialData
                     {
-                        name = materialName
+                        name = extra.name
                     };
                     asset.extraMaterialData.Add(data);
                 }
 
                 if (data.material == null)
                 {
-                    data.material = new Material(asset.shader) {name = $"{asset.name}_{materialName} Material"};
+                    data.material = new Material(asset.shader) {name = $"{asset.name}_{extra.name} Material"};
                     AssetDatabase.AddObjectToAsset(data.material, asset);
                 }
 
                 data.material.shader = asset.shader;
+
+                if (extra.preset != null)
+                {
+                    var preset = new Preset(extra.preset);
+                    if (preset.CanBeAppliedTo(data.material))
+                    {
+                        preset.ApplyTo(data.material);
+                    }
+
+                    Object.DestroyImmediate(preset);
+                }
             }
 
             foreach (var data in asset.extraMaterialData)
             {
-                if (asset.extraMaterials.Contains(data.name))
+                if (asset.extraMaterials.Any(extra => extra.name == data.name))
                 {
                     continue;
                 }
