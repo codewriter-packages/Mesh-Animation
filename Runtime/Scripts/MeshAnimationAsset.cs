@@ -20,6 +20,9 @@ namespace CodeWriter.MeshAnimation
         [SerializeField]
         internal Material materialPreset = default;
 
+        [SerializeField]
+        internal bool npotBakedTexture = false;
+
         [Required]
         [SerializeField]
         [ListDrawerSettings(Expanded = true, ShowPaging = false, AlwaysAddDefaultValue = true)]

@@ -188,14 +188,14 @@ namespace CodeWriter.MeshAnimation
                     }
                 }
 
-                var texWidth = Mathf.NextPowerOfTwo(vertexCount);
-                var textHeight = Mathf.NextPowerOfTwo(framesCount);
+                var texWidth = asset.npotBakedTexture ? vertexCount : Mathf.NextPowerOfTwo(vertexCount);
+                var textHeight = asset.npotBakedTexture ? framesCount : Mathf.NextPowerOfTwo(framesCount);
 
                 var texture = new Texture2D(texWidth, textHeight, TextureFormat.RGB24, false)
                 {
                     name = asset.name + " Texture",
                     hideFlags = HideFlags.NotEditable,
-                    wrapMode = TextureWrapMode.Repeat,
+                    wrapMode = TextureWrapMode.Clamp,
                 };
 
                 AssetDatabase.AddObjectToAsset(texture, asset);
