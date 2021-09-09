@@ -28,6 +28,9 @@ namespace CodeWriter.MeshAnimation
             foreach (var data in asset.extraMaterialData) {
                 DestroyObject(ref data.material);
             }
+
+            asset.extraMaterialData = new List<MeshAnimationAsset.ExtraMaterialData>();
+            asset.animationData = new List<MeshAnimationAsset.AnimationData>();
             
             SaveAsset(asset);
         }
@@ -79,15 +82,18 @@ namespace CodeWriter.MeshAnimation
 
         private static void CreateMaterial(MeshAnimationAsset asset)
         {
+            var materialAssetName = asset.name + " Material";
+                
             if (asset.bakedMaterial == null)
             {
-                var material = new Material(asset.shader) {name = asset.name + " Material"};
+                var material = new Material(asset.shader) {name = materialAssetName};
                 asset.bakedMaterial = material;
                 AssetDatabase.AddObjectToAsset(material, asset);
             }
             else
             {
                 asset.bakedMaterial.shader = asset.shader;
+                asset.bakedMaterial.name = materialAssetName;
             }
         }
 
@@ -113,6 +119,20 @@ namespace CodeWriter.MeshAnimation
 
                 data.material.shader = asset.shader;
             }
+
+            foreach (var data in asset.extraMaterialData)
+            {
+                if (asset.extraMaterials.Contains(data.name))
+                {
+                    continue;
+                }
+
+                Object.DestroyImmediate(data.material, true);
+
+                data.material = null;
+            }
+
+            asset.extraMaterialData.RemoveAll(it => it.material == null);
         }
 
         private static void CreateTexture(MeshAnimationAsset asset, out bool aborted)
