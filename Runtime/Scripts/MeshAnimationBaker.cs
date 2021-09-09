@@ -3,6 +3,7 @@ namespace CodeWriter.MeshAnimation
 {
     using System;
     using System.Linq;
+    using System.Collections.Generic;
     using JetBrains.Annotations;
     using UnityEditor;
     using UnityEngine;
@@ -23,6 +24,11 @@ namespace CodeWriter.MeshAnimation
 
             DestroyObject(ref asset.bakedMaterial);
             DestroyObject(ref asset.bakedTexture);
+            
+            foreach (var data in asset.extraMaterialData) {
+                DestroyObject(ref data.material);
+            }
+            
             SaveAsset(asset);
         }
 
@@ -49,6 +55,7 @@ namespace CodeWriter.MeshAnimation
                 if (!aborted)
                 {
                     CreateMaterial(asset);
+                    CreateExtraMaterials(asset);
                     BakeAnimations(asset);
                 }
 
@@ -81,6 +88,30 @@ namespace CodeWriter.MeshAnimation
             else
             {
                 asset.bakedMaterial.shader = asset.shader;
+            }
+        }
+
+        private static void CreateExtraMaterials(MeshAnimationAsset asset)
+        {
+            foreach (var materialName in asset.extraMaterials)
+            {
+                var data = asset.extraMaterialData.Find(it => it.name == materialName);
+                if (data == null)
+                {
+                    data = new MeshAnimationAsset.ExtraMaterialData
+                    {
+                        name = materialName
+                    };
+                    asset.extraMaterialData.Add(data);
+                }
+
+                if (data.material == null)
+                {
+                    data.material = new Material(asset.shader) {name = $"{asset.name}_{materialName} Material"};
+                    AssetDatabase.AddObjectToAsset(data.material, asset);
+                }
+
+                data.material.shader = asset.shader;
             }
         }
 
@@ -231,9 +262,17 @@ namespace CodeWriter.MeshAnimation
             Object.DestroyImmediate(bakeObject);
             Object.DestroyImmediate(bakeMesh);
 
-            asset.bakedMaterial.SetTexture(AnimTextureProp, asset.bakedTexture);
-            asset.bakedMaterial.SetVector(AnimationMulProp, boundMax - boundMin);
-            asset.bakedMaterial.SetVector(AnimationAddProp, boundMin);
+            var materials = new HashSet<Material> { asset.bakedMaterial };
+            foreach (var data in asset.extraMaterialData)
+            {
+                materials.Add(data.material);
+            }
+
+            foreach (var material in materials) {
+                material.SetTexture(AnimTextureProp, asset.bakedTexture);
+                material.SetVector(AnimationMulProp, boundMax - boundMin);
+                material.SetVector(AnimationAddProp, boundMin);
+            }
         }
 
         private static void CaptureMeshToTexture(Texture2D texture, Mesh mesh, Vector3 min, Vector3 max, int line)

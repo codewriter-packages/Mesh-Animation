@@ -22,6 +22,11 @@ namespace CodeWriter.MeshAnimation
         [ListDrawerSettings(Expanded = true, ShowPaging = false, AlwaysAddDefaultValue = true)]
         internal AnimationClip[] animationClips = new AnimationClip[0];
 
+        [Required]
+        [SerializeField]
+        [ListDrawerSettings(ShowPaging = false, AlwaysAddDefaultValue = true)]
+        internal List<string> extraMaterials = new List<string>();
+
         [DisableIf("@true")]
         [SerializeField]
         internal Texture2D bakedTexture = default;
@@ -30,10 +35,22 @@ namespace CodeWriter.MeshAnimation
         [SerializeField]
         internal Material bakedMaterial = default;
 
+        [TableList(ShowPaging = false)]
+        [DisableIf("@true")]
+        [SerializeField]
+        internal List<ExtraMaterialData> extraMaterialData = new List<ExtraMaterialData>();
+
         [TableList(AlwaysExpanded = true, ShowPaging = false)]
         [DisableIf("@true")]
         [SerializeField]
         internal List<AnimationData> animationData = new List<AnimationData>();
+
+        [Serializable]
+        internal class ExtraMaterialData
+        {
+            public string name;
+            public Material material;
+        }
 
         [Serializable]
         internal class AnimationData
