@@ -2,8 +2,9 @@ namespace CodeWriter.MeshAnimation
 {
     using JetBrains.Annotations;
     using UnityEngine;
-    using Sirenix.OdinInspector;
+    using TriInspector;
 
+    [DrawWithTriInspector]
     public class MeshAnimator : MonoBehaviour
     {
         [Required]
@@ -19,7 +20,7 @@ namespace CodeWriter.MeshAnimation
         private void Awake()
         {
             _propertyBlock = new MaterialPropertyBlock();
-            
+
             MeshCache.GenerateSecondaryUv(this.meshRenderer.GetComponent<MeshFilter>().sharedMesh);
         }
 

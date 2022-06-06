@@ -2,10 +2,12 @@
   "name": "com.codewriter.meshanimation",
   "displayName": "Mesh Animation",
   "description": "GPU mesh animation library for Unity",
-  "version": "1.0.1",
-  "unity": "2019.3",
+  "version": "2.0.0",
+  "unity": "2020.1",
   "license": "MIT",
   "author": "Vlad Vanifatov (https://github.com/vanifatovvlad)",
   "homepage": "https://github.com/codewriter-packages/Mesh-Animation#readme",
-  "dependencies": {}
+  "dependencies": {
+    "com.codewriter.triinspector": "1.4.0"
+  }
 }

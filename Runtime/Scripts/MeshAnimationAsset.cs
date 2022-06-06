@@ -2,14 +2,14 @@ namespace CodeWriter.MeshAnimation
 {
     using System;
     using System.Collections.Generic;
-    using Sirenix.OdinInspector;
     using UnityEngine;
+    using TriInspector;
 
+    [DrawWithTriInspector]
     [CreateAssetMenu(menuName = "Mesh Animation")]
     public class MeshAnimationAsset : ScriptableObject
     {
-        [InfoBox("@GetValidationMessage()", InfoMessageType.Error, visibleIfMemberName: nameof(IsInvalid))]
-        [Required]
+        [InfoBox("$" + nameof(GetValidationMessage), TriMessageType.Error, visibleIf: nameof(IsInvalid))]
         [SerializeField]
         internal GameObject skin = default;
 
@@ -23,31 +23,32 @@ namespace CodeWriter.MeshAnimation
         [SerializeField]
         internal bool npotBakedTexture = false;
 
+        [PropertySpace]
         [Required]
         [SerializeField]
-        [ListDrawerSettings(Expanded = true, ShowPaging = false, AlwaysAddDefaultValue = true)]
+        [ListDrawerSettings(AlwaysExpanded = true)]
         internal AnimationClip[] animationClips = new AnimationClip[0];
 
         [Required]
         [SerializeField]
-        [TableList(ShowPaging = false)]
+        [TableList]
         internal List<ExtraMaterial> extraMaterials = new List<ExtraMaterial>();
 
-        [DisableIf("@true")]
+        [ReadOnly]
         [SerializeField]
         internal Texture2D bakedTexture = default;
 
-        [DisableIf("@true")]
+        [ReadOnly]
         [SerializeField]
         internal Material bakedMaterial = default;
 
-        [TableList(ShowPaging = false)]
-        [DisableIf("@true")]
+        [TableList(HideAddButton = true, HideRemoveButton = true)]
+        [ReadOnly]
         [SerializeField]
         internal List<ExtraMaterialData> extraMaterialData = new List<ExtraMaterialData>();
 
-        [TableList(AlwaysExpanded = true, ShowPaging = false)]
-        [DisableIf("@true")]
+        [TableList(AlwaysExpanded = true, HideAddButton = true, HideRemoveButton = true)]
+        [ReadOnly]
         [SerializeField]
         internal List<AnimationData> animationData = new List<AnimationData>();
 
@@ -81,6 +82,8 @@ namespace CodeWriter.MeshAnimation
 
         public string GetValidationMessage()
         {
+            if (skin == null) return "Skin is required";
+
             if (animationClips.Length == 0) return "No animation clips";
 
             foreach (var clip in animationClips)
