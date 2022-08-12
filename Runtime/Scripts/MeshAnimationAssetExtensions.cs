@@ -35,7 +35,7 @@ namespace CodeWriter.MeshAnimation
             var length = data.lengthFrames;
             var s = speed / Mathf.Max(data.lengthSeconds, 0.01f);
             var time = normalizedTime.HasValue
-                ? Time.timeSinceLevelLoad + Mathf.Clamp01(normalizedTime.Value) * data.lengthSeconds
+                ? Time.timeSinceLevelLoad - Mathf.Clamp01(normalizedTime.Value) / s
                 : block.GetVector(AnimationTimeProp).z;
 
             block.SetFloat(AnimationLoopProp, data.looping ? 1 : 0);
