@@ -2,7 +2,7 @@
   "name": "com.codewriter.meshanimation",
   "displayName": "Mesh Animation",
   "description": "GPU mesh animation library for Unity",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "unity": "2020.1",
   "license": "MIT",
   "author": "Vlad Vanifatov (https://github.com/vanifatovvlad)",
