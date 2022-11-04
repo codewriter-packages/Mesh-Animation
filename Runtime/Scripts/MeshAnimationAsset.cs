@@ -23,6 +23,9 @@ namespace CodeWriter.MeshAnimation
         [SerializeField]
         internal bool npotBakedTexture = false;
 
+        [SerializeField]
+        internal bool linearColorSpace = false;
+
         [PropertySpace]
         [Required]
         [SerializeField]
@@ -107,6 +110,11 @@ namespace CodeWriter.MeshAnimation
         }
 
 #if UNITY_EDITOR
+        private void Reset()
+        {
+            linearColorSpace = UnityEditor.PlayerSettings.colorSpace == ColorSpace.Linear;
+        }
+
         [DisableIf(nameof(IsInvalid))]
         [PropertySpace(10)]
         [Button(ButtonSizes.Large, Name = "Bake")]
