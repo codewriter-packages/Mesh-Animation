@@ -3,6 +3,8 @@ Mesh Animation is lightweight library for rendering hundreds of meshes in one dr
 
 #### NOTE: To use MeshAnimation library you need to install [Tri Inspector](https://github.com/codewriter-packages/Tri-Inspector) - Free and open-source library that improves unity inspector.
 
+![preview](https://user-images.githubusercontent.com/26966368/201170891-99093ad9-6bd6-4ed3-a81e-1cd0f1becb55.png)
+
 ## How it works?
 Mesh Animation bakes vertex positions for each frame of animation to texture. Custom shader then move mesh vertexes to desired positions on GPU. This allows draw the same original mesh multiple times with GPU Instancing. Unique animation parameters are overridden for each instance with Material Property Block.
 
