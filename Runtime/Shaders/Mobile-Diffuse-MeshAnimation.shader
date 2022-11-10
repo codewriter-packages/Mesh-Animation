@@ -14,7 +14,7 @@ Shader "Mobile/Diffuse (Mesh Animation)" {
         LOD 150
     
         CGPROGRAM
-        #pragma surface surf Lambert noforwardadd vertex:vert
+        #pragma surface surf Lambert noforwardadd addshadow vertex:vert
         #pragma multi_compile_instancing 
         #pragma target 2.5
         #pragma require samplelod
